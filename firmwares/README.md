@@ -20,6 +20,8 @@ Notes for MK1 / EX20 firmwares:
 
 All firmwares support both the MK1 and EX20 hardware, and are thus interchangable.
 
+Depending on the version of the MK1 and EX20, the hardware is either equipped with a AF20 (switched capacitor) or AF21 (SSM2044) filter board. The firmware must match this filter board, or the hardware will not start properly.
+
 ## Other firmwares
 
 Notes for any of the other firmwares:
