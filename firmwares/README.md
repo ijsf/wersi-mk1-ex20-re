@@ -22,6 +22,15 @@ All firmwares support both the MK1 and EX20 hardware, and are thus interchangabl
 
 Depending on the version of the MK1 and EX20, the hardware is either equipped with a AF20 (switched capacitor) or AF21 (SSM2044) filter board. The firmware must match this filter board, or the hardware will not start properly.
 
+### Known bugs
+
+A number of known critical bugs exist in the original firmware that prevent SysEx from working properly.
+
+* Corrupted SysEx messages for blocks due to missing `0xF7` stop byte.
+* Corrupted SysEx messages for transform and switch due to missing `0xF7` stop byte.
+
+Any firmwares marked as "patched" above will have the bugs fixed for which a fix is available.
+
 ## Other firmwares
 
 Notes for any of the other firmwares:
