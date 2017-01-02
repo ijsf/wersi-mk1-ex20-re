@@ -29,10 +29,10 @@ A number of known critical bugs exist in the original firmware that prevent SysE
 Any firmwares marked as "patched" above will have the following bugs fixed:
 
 * Corrupted SysEx messages for blocks due to missing `0xF7` stop byte.
+* Corrupted SysEx messages for transform ('t') and switch ('s') due to missing `0xF7` stop byte. These messages have been disabled altogether.
 
 Other bugs or issues that still need to be fixed:
 
-* Corrupted SysEx messages for transform and switch due to missing `0xF7` stop byte.
 * Change of Wersi MK1/EX20 SysEx identifier `0x01` to `0xFE` to identify fixed firmwares. 
 
 ## Other firmwares
