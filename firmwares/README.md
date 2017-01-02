@@ -12,11 +12,11 @@ Notes for MK1 / EX20 firmwares:
     630369W MK1 IC3 Ver. 1.11 (AF20)
     630813N MK1 IC5 Ver. 1.11 (AF20)
     
-    630469V	MK1	IC3 Ver. 1.16 (AF20) - Patch available
-    630814F	MK1	IC5 Ver. 1.16 (AF20)
+    630469V MK1 IC3 Ver. 1.16 (AF20) - Patch available
+    630814F MK1 IC5 Ver. 1.16 (AF20)
     
-    630469W	MK1	IC3 Ver. 1.21 (AF21) 15.04.87 - Wersi MK1 S3 - Patch available
-            MK1	IC5 Ver. 1.21 (AF21) 21.04.87 - Wersi MK1 S3
+    630469W MK1 IC3 Ver. 1.21 (AF21) 15.04.87 - Wersi MK1 S3 - Patch available
+            MK1 IC5 Ver. 1.21 (AF21) 21.04.87 - Wersi MK1 S3
 
 All firmwares support both the MK1 and EX20 hardware, and are thus interchangable.
 
@@ -30,10 +30,8 @@ Any firmwares marked as "patched" above will have the following bugs fixed:
 
 * Corrupted SysEx messages for blocks due to missing `0xF7` stop byte.
 * Corrupted SysEx messages for transform ('t') and switch ('s') due to missing `0xF7` stop byte. These messages have been disabled altogether.
+* Change of Wersi MK1/EX20 SysEx identifier `0x01` to `0x7F` to identify fixed firmwares.
 
-Other bugs or issues that still need to be fixed:
-
-* Change of Wersi MK1/EX20 SysEx identifier `0x01` to `0xFE` to identify fixed firmwares. 
 
 ## Other firmwares
 
