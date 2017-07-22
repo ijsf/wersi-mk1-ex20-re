@@ -38,6 +38,8 @@ The envelope interpreter uses the following variables:
 * w8: 8-bit word register at offset $8 (aliases d8)
 * wA: 8-bit word register at offset $A (aliases dA)
 * wC: 8-bit word register at offset $C (aliases dC)
+* w10: 8-bit word register at offset $10
+* w11: 8-bit word register at offset $11
 
 ## Instructions
 
@@ -58,6 +60,24 @@ BB represents the second byte.
 
 y[F0 FF] yields a 12-bit operand encoded in both bytes.
 y[00 FF] an 8-bit operand encoded in the second byte.
+
+---
+
+01  TableYOps[1]  d8 = y[F0 FF]
+02  TableYOps[1]  dA = y[F0 FF]
+03  TableYOps[1]  dC = y[F0 FF]
+
+05  TableYOps[1]  d8 += y[F0 FF]
+06  TableYOps[1]  dA += y[F0 FF]
+07  TableYOps[1]  dC += y[F0 FF]
+
+09  TableYOps[1]  if(y < d8)
+0A  TableYOps[1]  if(y < dA)
+0B  TableYOps[1]  if(y < dC)
+
+0D  TableYOps[1]  if(y > d8)
+0E  TableYOps[1]  if(y > dA)
+0F  TableYOps[1]  if(y > dC)
 
 ---
 
