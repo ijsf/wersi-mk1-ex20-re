@@ -149,10 +149,10 @@ E4  TableROps[39] d8 = d8 + (d8 * dC), or $FFFF on overflow
 E8  TableROps[3A] dA = dA + (dA * dC), or $FFFF on overflow
 EC  TableROps[3B] dC = dC + (dC * dA), or $FFFF on overflow
 
-F0  TableROps[3C] ???
-F4  TableROps[3D] ???
-F8  TableROps[3E] ???
-FC  TableROps[3F] ???
+F0  TableROps[3C] d8 *= -dA
+F4  TableROps[3D] d8 *= -dC
+F8  TableROps[3E] dA *= -dC
+FC  TableROps[3F] dC *= -dA
 
 ```
 
