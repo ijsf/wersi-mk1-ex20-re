@@ -22,6 +22,7 @@ However, non-standard modules are frequently used in the factory ROM presets.
 These will trigger a "special envelope" event and cannot be edited in the interface.
 
 Each instruction consist of an opcode and a number of operand (parameter) bits.
+All instructions are real-time and have a fixed latency of 5 ms.
 
 When the master CPU loads envelope data, it uses a table defining all standard envelope modules.
 Each table entry contains a data and a mask, which is used to check whether the given envelope data matches any module in the table.
@@ -71,17 +72,17 @@ y[00 FF] an 8-bit operand encoded in the second byte.
 06  TableYOps[1]  dA += y[F0 FF]
 07  TableYOps[1]  dC += y[F0 FF]
 
-09  TableYOps[1]  if(y < d8)
-0A  TableYOps[1]  if(y < dA)
-0B  TableYOps[1]  if(y < dC)
+09  TableYOps[1]  if(y[F0 FF] < d8)
+0A  TableYOps[1]  if(y[F0 FF] < dA)
+0B  TableYOps[1]  if(y[F0 FF] < dC)
 
-0D  TableYOps[1]  if(y > d8)
-0E  TableYOps[1]  if(y > dA)
-0F  TableYOps[1]  if(y > dC)
+0D  TableYOps[1]  if(y[F0 FF] > d8)
+0E  TableYOps[1]  if(y[F0 FF] > dA)
+0F  TableYOps[1]  if(y[F0 FF] > dC)
 
 ---
 
-00  TableROps[0]  ???
+00  TableROps[0]  nop
 
 04  TableROps[1]  w10 = (w10--) % y[00 FF]
 08  TableROps[2]  w10 = (w10--) % wA
@@ -192,106 +193,166 @@ Second byte contains the operand (parameter) bitmask for the first byte.
 
 ```
 03 F0   00 FF   68 00   0D F0   00 FF   C0 3F
+
+03	dC = y[F0 FF]
+68	d8 += dC
+0D	if(y > d8)
 ```
 
 ### Exponential up
 
 ```
 02 F0   00 FF   E0 00   0D F0   00 FF   C0 3F
+
+02	dA = y[F0 FF]
+E0	d8 = d8 + (d8 * dA), or $FFFF on overflow
+0D	if(y > d8)
 ```
 
 ### Dynamic linear up
 
 ```
 BC 00   00 FF   68 00   0D F0   00 FF   C0 3F
+
+BC	dC *= y[00 FF]
+68	d8 += dC
+0D	if(y > d8)
 ```
 
 ### Dynamic exponential up
 
 ```
 BC 00   00 FF   E4 00   0D F0   00 FF   C0 3F
+
+BC	dC *= y[00 FF]
+E4	d8 = d8 + (d8 * dC), or $FFFF on overflow
+0D	if(y > d8)
 ```
 
 ### Linear down
 
 ```
 03 F0   00 FF   88 00   09 F0   00 FF   C0 3F
+
+03	dC = y[F0 FF]
+88	d8 -= dC
+09	if(y < d8)
 ```
 
 ### Exponential down
 
 ```
 02 F0   00 FF   F0 00   09 F0   00 FF   C0 3F
+
+02	dA = y[F0 FF]
+F0	d8 *= -dA
+09	if(y < d8)
 ```
 
 ### Dynamic linear down
 
 ```
 BC 00   00 FF   88 00   09 F0   00 FF   C0 3F
+
+BC	dC *= y[00 FF]
+88	d8 -= dC
+09	if(y < d8)
 ```
 
 ### Dynamic exponential down
 
 ```
 BC 00   00 FF   F4 00   09 F0   00 FF   C0 3F
+
+BC	dC *= y[00 FF]
+F4	d8 *= -dC
+09	if(y < d8)
 ```
 
 ### Constant absolute
 
 ```
 01 F0   00 FF   00 00   00 FF   00 00   00 00
+
+d8 = y[F0 FF]
 ```
 
 ### Constant relative
 
 ```
 05 F0   00 FF   00 00   00 FF   00 00   00 00
+
+d8 += y[F0 FF]
 ```
 
 ### Step absolute
 
 ```
 01 F0   00 FF   01 F0   00 FF   00 00   00 00
+
+d8 = y[F0 FF]
+d8 = y[F0 FF]
 ```
 
 ### Step relative
 
 ```
 05 F0   00 FF   05 F0   00 FF   00 00   00 00
+
+d8 += y[F0 FF]
+d8 += y[F0 FF]
 ```
 
 ### Dynamic remain
 
 ```
 BC 00   00 FF   00 00   00 FF   0C 00   00 3F
+
+BC	dC *= y[00 FF]
+0C	w10 = (w10--) % wC
 ```
 
 ### Key weight
 
 ```
 60 00   DC 00   BC 00   00 FF   68 00   60 00
+
+60	swap(dA, dC)
+DC	dC *= dC
+BC	dC *= y[00 FF]
+68	d8 += dC
+60	swap(dA, dC)
 ```
 
 ### Vibrato 1
 
 ```
 00 00   00 00   80 00   00 FF   00 FF   00 FF
+
+80	vibrato 1
 ```
 
 ### Vibrato 2
 
 ```
 00 00   00 00   90 00   00 FF   00 FF   00 FF
+
+90	vibrato 2
 ```
 
 ### Noise
 
 ```
 00 00   00 00   10 00   00 00   00 FF   00 FF
+
+10	noise
 ```
 
 ### Repeat
 
 ```
 02 F0   00 FF   00 00   00 FF   18 00   00 3F
+
+02	dA = y[F0 FF]
+18	w11 = (w11--) % wA
 ```
