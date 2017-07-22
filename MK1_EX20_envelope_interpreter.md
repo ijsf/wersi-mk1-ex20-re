@@ -33,14 +33,19 @@ The mask is necessary to mask out operands (which can be anything) from the opco
 The envelope interpreter uses the following variables:
 
 * y register: ptr to current module data, used to decode relevant operands.
-* d8: 16-bit double word register at offset $8
+* d8: 16-bit double word register at offset $8.
 * dA: 16-bit double word register at offset $A
-* dC: 16-bit double word register at offset $C
+* dC: 16-bit double word register at offset $C.
 * w8: 8-bit word register at offset $8 (aliases d8)
 * wA: 8-bit word register at offset $A (aliases dA)
 * wC: 8-bit word register at offset $C (aliases dC)
 * w10: 8-bit word register at offset $10
 * w11: 8-bit word register at offset $11
+
+Some of these will contain values at the start of an envelope module:
+
+* d8: current envelope value, e.g. amplitude or pitch.
+* dC: current dynamic value, e.g. note velocity.
 
 ## Instructions
 
