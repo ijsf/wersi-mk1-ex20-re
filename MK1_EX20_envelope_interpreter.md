@@ -87,7 +87,7 @@ y[00 FF] an 8-bit operand encoded in the second byte.
 
 ---
 
-00  TableROps[0]  nop
+00  TableROps[0]  repeat last instruction, y[00 FF] cycles -- nop if y is zero
 
 04  TableROps[1]  w10 = (w10--) % y[00 FF]
 08  TableROps[2]  w10 = (w10--) % wA
@@ -279,7 +279,9 @@ F4	d8 *= -dC
 ```
 01 F0   00 FF   00 00   00 FF   00 00   00 00
 
-d8 = y[F0 FF]
+01	d8 = y[F0 FF]
+00	repeat last instruction, y[00 FF] cycles
+00	nop
 ```
 
 ### Constant relative
@@ -287,7 +289,9 @@ d8 = y[F0 FF]
 ```
 05 F0   00 FF   00 00   00 FF   00 00   00 00
 
-d8 += y[F0 FF]
+05	d8 += y[F0 FF]
+00	repeat last instruction, y[00 FF] cycles
+00	nop
 ```
 
 ### Step absolute
@@ -295,8 +299,9 @@ d8 += y[F0 FF]
 ```
 01 F0   00 FF   01 F0   00 FF   00 00   00 00
 
-d8 = y[F0 FF]
-d8 = y[F0 FF]
+01	d8 = y[F0 FF]
+01	d8 = y[F0 FF]
+00	nop
 ```
 
 ### Step relative
@@ -304,8 +309,9 @@ d8 = y[F0 FF]
 ```
 05 F0   00 FF   05 F0   00 FF   00 00   00 00
 
-d8 += y[F0 FF]
-d8 += y[F0 FF]
+05	d8 += y[F0 FF]
+05	d8 += y[F0 FF]
+00	nop
 ```
 
 ### Dynamic remain
@@ -314,6 +320,7 @@ d8 += y[F0 FF]
 BC 00   00 FF   00 00   00 FF   0C 00   00 3F
 
 BC	dC *= y[00 FF]
+00	repeat last instruction, y[00 FF] cycles
 0C	w10 = (w10--) % wC
 ```
 
@@ -334,6 +341,7 @@ BC	dC *= y[00 FF]
 ```
 00 00   00 00   80 00   00 FF   00 FF   00 FF
 
+00	nop
 80	vibrato 1
 ```
 
@@ -342,6 +350,7 @@ BC	dC *= y[00 FF]
 ```
 00 00   00 00   90 00   00 FF   00 FF   00 FF
 
+00	nop
 90	vibrato 2
 ```
 
@@ -350,6 +359,7 @@ BC	dC *= y[00 FF]
 ```
 00 00   00 00   10 00   00 00   00 FF   00 FF
 
+00	nop
 10	noise
 ```
 
@@ -359,5 +369,6 @@ BC	dC *= y[00 FF]
 02 F0   00 FF   00 00   00 FF   18 00   00 3F
 
 02	dA = y[F0 FF]
+00	repeat last instruction, y[00 FF] cycles
 18	w11 = (w11--) % wA
 ```
